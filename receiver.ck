@@ -29,5 +29,9 @@ while( true ) {
             // Off
             if( noteState == 0 ) e1.keyOff();
         }
+        e1.keyOn();
+        1::second => now;
+        e1.keyOff();
+        1::second => now;
     }
 }

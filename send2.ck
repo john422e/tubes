@@ -13,23 +13,28 @@ OscSend xmit2;
 xmit1.setHost( pione, port);
 xmit2.setHost( pitwo, port);
 
-"/osc1, i" => string osc1Address;
-"/osc2, i" => string osc2Address;
+"/osc1, i" => string osc1;
+"/osc2, i" => string osc2;
 
+fun void send(OscSend xmit, string address, int noteState) {
+    xmit.startMsg(address);
+    noteState => xmit.addInt;
+    <<< address, noteState >>>;
+}
 
 // send
 while( true )
 {
-    xmit1.startMsg(osc1Address, 1);
-    <<< 1, "ON" >>>;
+    send(xmit1, osc1, 1);
     2::second => now;
-    xmit1.startMsg(osc1Address, 0);
-    <<< 1, "OFF" >>>;
+    send(xmit1, osc1, 0);
+    send(xmit1, osc2, 1);
     2::second => now;
-    xmit2.startMsg(osc1Address, 1);
-    <<< 3, "ON" >>>;
+    send(xmit1, osc2, 0);
+    send(xmit2, osc1, 1);
     2::second => now;
-    xmit2.startMsg(osc1Address, 0);
-    <<< 3, "OFF" >>>;
+    send(xmit2, osc1, 0);
+    send(xmit2, osc2, 1);
     2::second => now;
+    send(xmit2, osc2, 0);
 }

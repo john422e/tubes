@@ -7,7 +7,8 @@ OscRecv recv;
 // start listening
 recv.listen();
 
-recv.event("/osc1, i") @=> OscEvent oe;
+recv.event("/osc1, i") @=> OscEvent oe1;
+recv.event("/osc2, i") @=> OscEvent oe2;
 
 // sound chains
 Noise n1 => Envelope e1 => dac.chan(0);
@@ -19,17 +20,22 @@ Noise n2 => Envelope e2 => dac.chan(1);
 int noteState;
 
 while( true ) {
-    //e1.keyOn();
-    //1::second => now;
-    //e1.keyOff();
-    //1::second => now;
-    oe => now;
-    while( oe.nextMsg() != 0 ) {
-        oe.getInt() => noteState;
+    oe1 => now;
+    while( oe1.nextMsg() != 0 ) {
+        oe1.getInt() => noteState;
         <<< noteState >>>;
         // On
         if( noteState == 1 ) e1.keyOn();
         // Off
         if( noteState == 0 ) e1.keyOff();        
+    }
+    oe2 => now;
+    while( oe2.nextMsg() != 0 ) {
+        oe2.getInt() => noteState;
+        <<< noteState >>>;
+        // On
+        if( noteState == 1 ) e2.keyOn();
+        // Off
+        if( noteState == 0 ) e2.keyOff();        
     }
 }

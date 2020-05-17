@@ -5,7 +5,7 @@
 OscRecv recv;
 10002 => recv.port;
 // start listening
-recv.isten();
+recv.listen();
 
 recv.event("/osc1, i") @=> OscEvent oe;
 

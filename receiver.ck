@@ -18,6 +18,10 @@ Noise n2 => Envelope e2 => dac.chan(1);
 int noteState;
 
 while( true ) {
+    e1.keyOn();
+    1::second => now;
+    e1.keyOff();
+    1::second => now;
     in => now;
     while( in.recv(msg) ) {
         // osc num
@@ -29,9 +33,6 @@ while( true ) {
             // Off
             if( noteState == 0 ) e1.keyOff();
         }
-        e1.keyOn();
-        1::second => now;
-        e1.keyOff();
-        1::second => now;
+        
     }
 }

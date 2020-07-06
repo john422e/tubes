@@ -2,7 +2,7 @@
 // tubes instrument solo for kitty brazelton's 'fire', july 2020
 
 // filepath
-me.sourceDir() + "audio/fire_hot.wav" => string filename;
+me.sourceDir() + "audio/fire_hot_compressed.wav" => string filename;
 
 // osc
 OscRecv recv;

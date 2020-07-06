@@ -39,7 +39,7 @@ while( true )
     <<< fire.pos(), fire.samples() >>>;
     1::second => now;
     
-    if ( fire.pos() == fire.samples()-1 ) {
+    if ( fire.pos() >= fire.samples()-1 ) {
         <<< "END" >>>;
         e.keyOff();
         10::samp => now;

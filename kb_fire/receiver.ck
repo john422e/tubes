@@ -2,49 +2,120 @@
 // tubes instrument solo for kitty brazelton's 'fire', july 2020
 
 // filepath
-me.sourceDir() + "audio/fire_hot_compressed.wav" => string filename;
+me.sourceDir() + "/audio/stove_compressed.wav" => string stove_samp;
+me.sourceDir() + "audio/fire_hot_compressed.wav" => string crackle_samp;
 
 // osc
-OscRecv recv;
-10002 => recv.port;
+OscIn in;
+OscMsg msg;
+10002 => in.port;
 // start listening
-recv.listen();
-
-"/buff1, i" => string buff1;
-"/buff2, i" => string buff2;
-
-recv.event(buff1) @=> OscEvent oe1;
-recv.event(buff2) @=> OscEvent oe2;
+in.listenAll();
 
 // sound chains
-SndBuf fire => Envelope e => dac;
+Gain master => dac;
+SndBuf stove => Envelope e1 => master;
+SndBuf crackle => Envelope e2 => master;
 
-10::samp => e.duration;
+10::samp => e1.duration => e2.duration;
 
-0.95 => fire.gain;
-fire.read(filename);
+0.95 => master.gain;
+// read in buffers
+stove.read(stove_samp);
+crackle.read(crackle_samp);
 48000 => int sampleRate;
-<<< fire.length(), fire.samples() / sampleRate, "TIME", now >>>;
+<<< stove.length(), stove.samples() / sampleRate, "TIME", now >>>;
 
 45 * sampleRate => int loopBack;
 
-int buffState;
+int buff1State;
+int buff2State;
 
-0 => fire.pos;
+// set tape heads to end
+stove.samples() => stove.pos;
+crackle.samples() => crackle.pos;
 
-e.keyOn();
-
-while( true )
-{        
-    <<< fire.pos(), fire.samples() >>>;
-    1::second => now;
-    
-    if ( fire.pos() >= fire.samples()-1 ) {
-        <<< "END" >>>;
-        e.keyOff();
-        10::samp => now;
-        loopBack => fire.pos;
-        5::ms => now;
-        e.keyOn();
+fun void osc_listener() {
+    // MAIN
+    while( true ) {
+        // wait for an event
+        in => now;
+        while( in.recv(msg) != 0 ) {
+            <<< "RECEIVED", msg.address >>>;
+            // MASTER SWITCH
+            if( msg.address == "/master" ) {
+                <<< "receiver: MASTER", msg.getInt(0) >>>;
+                // MASTER on
+                if( msg.getInt(0) == 0 ) {
+                    0 => buff1State => buff2State;
+                    e1.keyOff();
+                    e2.keyOff();
+                    stove.samples() => stove.pos;
+                    crackle.samples() => crackle.pos;
+                }
+                // MASTER OFF
+                else if( msg.getInt(0) == 1 ) {
+                    1 => buff1State => buff2State;
+                    e1.keyOn();
+                    e2.keyOn();
+                    0 => stove.pos => crackle.pos;
+                }
+            }
+            // stove buffer
+            else if( msg.address == "/buff1" ) {
+                <<< "receiver: BUFF 1 SWITCH" >>>;
+                if( buff1State == 0 ) {
+                    <<< "BUFF 1 ON" >>>;
+                    0 => stove.pos;
+                    e1.keyOn();
+                }
+                else if( buff1State == 1 ) {
+                    <<< "BUFF 1 OFF" >>>;
+                    e1.keyOff();
+                    stove.samples() => stove.pos;
+                }
+            }
+            // crackle buffer
+            else if( msg.address == "/buff2" ) {
+                <<< "receiver: BUFF 2 SWITCH" >>>;
+                if( buff2State == 0 ) {
+                    <<< "BUFF 2 ON" >>>;
+                    0 => crackle.pos;
+                    e2.keyOn();
+                }
+                else if( buff2State == 1 ) {
+                    <<< "BUFF 2 OFF" >>>;
+                    e2.keyOff();
+                    crackle.samples() => crackle.pos;
+                }
+            }
+        }
     }
 }
+
+fun void xfadeLoop( SndBuf s, Envelope e, int loopBack ) {
+    e.time() => float fadeTime;
+    e.keyOff();
+    fadeTime::second => now;
+    loopBack => s.pos;
+    e.keyOn();
+}
+
+spork ~ osc_listener();
+
+// MAIN LOOP
+while( true )
+{        
+   if( stove.pos() == stove.samples() ) {
+       spork ~ xfadeLoop( stove, e1, loopBack );
+    }
+    else if( crackle.pos() == crackle.samples() ) {
+        spork ~ xfadeLoop( crackle, e2, loopBack );
+    }
+    1::second => now;
+    <<< "STOVE:", stove.pos(), stove.samples() >>>;
+    <<< "CRACKLE:", crackle.pos(), crackle.samples() >>>; 
+}
+
+
+<<< "END" >>>;

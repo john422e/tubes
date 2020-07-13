@@ -113,6 +113,7 @@ fun void xfadeLoop( SndBuf s, Envelope e, int loopBack ) {
 }
 
 fun void fadeIn( Envelope e, float fadeTime ) {
+    1 => buff2State;
     e.time() => float originalFade;
     e.keyOff();
     fadeTime => e.time;

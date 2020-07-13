@@ -48,7 +48,7 @@ fun void osc_listener() {
                 <<< "receiver: MASTER", msg.getInt(0) >>>;
                 // MASTER on
                 if( msg.getInt(0) == 0 ) {
-                    0 => buff1State => buff2State;
+                    0 => buff1State => buff2State => masterState;
                     e1.keyOff();
                     e2.keyOff();
                     stove.samples() => stove.pos;
@@ -56,7 +56,7 @@ fun void osc_listener() {
                 }
                 // MASTER OFF
                 else if( msg.getInt(0) == 1 ) {
-                    1 => buff1State => buff2State;
+                    1 => buff1State => buff2State => masterState;
                     e1.keyOn();
                     e2.keyOn();
                     0 => stove.pos => crackle.pos;
@@ -69,11 +69,13 @@ fun void osc_listener() {
                     <<< "BUFF 1 ON" >>>;
                     0 => stove.pos;
                     e1.keyOn();
+                    1 => buff1State;
                 }
                 else if( buff1State == 1 ) {
                     <<< "BUFF 1 OFF" >>>;
                     e1.keyOff();
                     stove.samples() => stove.pos;
+                    0 => buff1State;
                 }
             }
             // crackle buffer
@@ -83,11 +85,13 @@ fun void osc_listener() {
                     <<< "BUFF 2 ON" >>>;
                     0 => crackle.pos;
                     e2.keyOn();
+                    1 => buff2State;
                 }
                 else if( buff2State == 1 ) {
                     <<< "BUFF 2 OFF" >>>;
                     e2.keyOff();
                     crackle.samples() => crackle.pos;
+                    0 => buff2State;
                 }
             }
         }

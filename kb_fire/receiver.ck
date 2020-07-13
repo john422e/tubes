@@ -113,13 +113,14 @@ fun void xfadeLoop( SndBuf s, Envelope e, int loopBack ) {
 }
 
 fun void fadeIn( Envelope e, float fadeTime ) {
-    1 => buff2State;
     e.time() => float originalFade;
     e.keyOff();
+    e.time()::second => now;
     fadeTime => e.time;
     e.keyOn();
     fadeTime::second => now;
     originalFade => e.time;
+    1 => buff2State;
 }
 
 spork ~ osc_listener();

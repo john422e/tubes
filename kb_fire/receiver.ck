@@ -16,11 +16,11 @@ in.listenAll();
 Gain master => dac;
 SndBuf stove => Envelope e1 => master;
 SndBuf crackle => Envelope e2 => master;
+Noise n => e1 => master;
 
 10::samp => e1.duration => e2.duration;
 
 1.0 => master.gain;
-1.5 => stove.gain;
 // read in buffers
 stove.read(stove_samp);
 crackle.read(crackle_samp);

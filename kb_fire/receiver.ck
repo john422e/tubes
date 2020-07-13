@@ -28,6 +28,7 @@ crackle.read(crackle_samp);
 
 45 * sampleRate => int loopBack;
 
+0 => int masterState;
 int buff1State;
 int buff2State;
 
@@ -106,11 +107,11 @@ spork ~ osc_listener();
 // MAIN LOOP
 while( true )
 {        
-   if( stove.pos() == stove.samples() ) {
+   if( stove.pos() == stove.samples() && masterState == 1 ) {
        spork ~ xfadeLoop( stove, e1, loopBack );
        <<< "LOOPING" >>>;
     }
-    else if( crackle.pos() == crackle.samples() ) {
+    else if( crackle.pos() == crackle.samples() && masterState == 1 ) {
         spork ~ xfadeLoop( crackle, e2, loopBack );
         <<< "LOOPING" >>>;
     }

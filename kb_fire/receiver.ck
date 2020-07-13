@@ -108,9 +108,11 @@ while( true )
 {        
    if( stove.pos() == stove.samples() ) {
        spork ~ xfadeLoop( stove, e1, loopBack );
+       <<< "LOOPING" >>>;
     }
     else if( crackle.pos() == crackle.samples() ) {
         spork ~ xfadeLoop( crackle, e2, loopBack );
+        <<< "LOOPING" >>>;
     }
     1::second => now;
     <<< "STOVE:", stove.pos(), stove.samples() >>>;

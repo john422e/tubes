@@ -23,10 +23,10 @@ if( !hi.openKeyboard( device ) ) me.exit();
 <<< "keyboard '" + hi.name() + "' ready", "" >>>;
 
 // ip addresses
-//"pione.local" => string pione;
-//"pitwo.local" => string pitwo;
-"127.0.0.1" => string pione;
-"127.0.0.1" => string pitwo;
+"pione.local" => string pione;
+"pitwo.local" => string pitwo;
+//"127.0.0.1" => string pione;
+//"127.0.0.1" => string pitwo;
 
 // osc send
 OscOut xmit1;

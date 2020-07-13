@@ -19,7 +19,7 @@ SndBuf crackle => Envelope e2 => master;
 
 10::samp => e1.duration => e2.duration;
 
-0.95 => master.gain;
+1.0 => master.gain;
 // read in buffers
 stove.read(stove_samp);
 crackle.read(crackle_samp);

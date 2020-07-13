@@ -96,8 +96,8 @@ fun void ui() {
                 // start fadeIN
                 else if( msg.key == 9 ) {
                     <<< "FADE" >>>;
-                    send( xmit1, "\fade" );
-                    send( xmit2, "\fade" );
+                    send( xmit1, "\fadeIn" );
+                    send( xmit2, "\fadeIn" );
                 }
                 
             }

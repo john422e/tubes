@@ -16,7 +16,7 @@ in.listenAll();
 Gain master => dac;
 SndBuf stove => Envelope e1 => master;
 SndBuf crackle => Envelope e2 => master;
-Noise n => e1 => master;
+Noise n => e2 => master;
 0.3 => n.gain;
 
 10::samp => e1.duration => e2.duration;
@@ -96,6 +96,10 @@ fun void osc_listener() {
                     0 => buff2State;
                 }
             }
+            else if( msg.address == "/fadeIn" ) {
+                <<< " fade in" >>>;
+                spork ~ fadeIn( 2, 10.0 );
+            }
         }
     }
 }
@@ -106,6 +110,15 @@ fun void xfadeLoop( SndBuf s, Envelope e, int loopBack ) {
     fadeTime::second => now;
     loopBack => s.pos;
     e.keyOn();
+}
+
+fun void fadeIn( Envelope e, float fadeTime ) {
+    e.time() => float originalFade;
+    e.keyOff();
+    fadeTime => e.time;
+    e.keyOn();
+    fadeTime::second => now;
+    originalFade => e.time;
 }
 
 spork ~ osc_listener();

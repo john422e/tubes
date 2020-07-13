@@ -68,7 +68,7 @@ fun void ui() {
             // action type
             if( msg.isButtonDown() )
             {
-                //<<< msg.key >>>; //"key down:", msg.which, "code", msg.key, "usb key", msg.ascii, "ascii" >>>;
+                <<< msg.key >>>; //"key down:", msg.which, "code", msg.key, "usb key", msg.ascii, "ascii" >>>;
                 // master on/off
                 if( msg.key == 44 ) {
                     masterSoundSwitch();
@@ -93,6 +93,13 @@ fun void ui() {
                     <<< "sender: pitwo buff 2" >>>;
                     send( xmit2, buff2 );
                 }
+                // start fadeIN
+                else if( msg.key == 9 ) {
+                    <<< "FADE" >>>;
+                    send( xmit1, "\fade" );
+                    send( xmit2, "\fade" );
+                }
+                
             }
         }
     }

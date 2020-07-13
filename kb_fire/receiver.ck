@@ -98,7 +98,7 @@ fun void osc_listener() {
             }
             else if( msg.address == "/fadeIn" ) {
                 <<< " fade in" >>>;
-                spork ~ fadeIn( 2, 10.0 );
+                spork ~ fadeIn( e2, 10.0 );
             }
         }
     }

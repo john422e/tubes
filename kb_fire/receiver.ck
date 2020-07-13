@@ -17,6 +17,7 @@ Gain master => dac;
 SndBuf stove => Envelope e1 => master;
 SndBuf crackle => Envelope e2 => master;
 Noise n => e1 => master;
+0.5 => n.gain;
 
 10::samp => e1.duration => e2.duration;
 

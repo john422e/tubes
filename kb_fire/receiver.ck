@@ -14,8 +14,9 @@ in.listenAll();
 
 // sound chains
 Gain master => dac;
+Gain master1;
 SndBuf stove => Envelope e1 => master;
-SndBuf crackle => Envelope e2 => master;
+SndBuf crackle => Envelope e2 => master1;
 
 10::samp => e1.duration => e2.duration;
 

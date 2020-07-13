@@ -111,11 +111,11 @@ spork ~ osc_listener();
 // MAIN LOOP
 while( true )
 {        
-   if( stove.pos() == stove.samples() && masterState == 1 ) {
+   if( stove.pos() == stove.samples() && ( masterState == 1 || buff1State == 1 ) ) {
        spork ~ xfadeLoop( stove, e1, loopBack );
        <<< "LOOPING" >>>;
     }
-    else if( crackle.pos() == crackle.samples() && masterState == 1 ) {
+    else if( crackle.pos() == crackle.samples() && ( masterState == 1 || buff2State == 1) ) {
         spork ~ xfadeLoop( crackle, e2, loopBack );
         <<< "LOOPING" >>>;
     }

@@ -100,7 +100,11 @@ fun void osc_listener() {
             }
             else if( msg.address == "/fadeIn" ) {
                 <<< " starting fade in" >>>;
-                spork ~ fadeIn( e2, 10.0 );
+                spork ~ fadeIn( e2, msg.getFloat(0) );
+            }
+            else if( msg.address == "/fadeOut" ) {
+                <<< "fading out" >>>;
+                spork ~ fadeOut(e2, msg.getFloat(0) );
             }
         }
     }
@@ -124,6 +128,16 @@ fun void fadeIn( Envelope e, float fadeTime ) {
     originalFade => e.time;
     1 => buff2State;
 }
+
+fun void fadeOut( Envelope e, float fadeTime ) {
+    e.time() => float originalFade;
+    fadeTime => e.time;
+    e.keyOff();
+    fadeTime::second => now;
+    originalFade => e.time;
+    0 => buff2State;
+}
+    
 
 spork ~ osc_listener();
 

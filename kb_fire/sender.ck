@@ -95,9 +95,14 @@ fun void ui() {
                 }
                 // start fadeIN
                 else if( msg.key == 9 ) {
-                    <<< "FADE" >>>;
-                    send( xmit1, "/fadeIn" );
-                    send( xmit2, "/fadeIn" );
+                    <<< "FADE IN" >>>;
+                    send( xmit1, "/fadeIn", 20 );
+                    send( xmit2, "/fadeIn", 20 );
+                }
+                else if ( msg.key == 10 ) {
+                    <<< "FADE OUT" >>>;
+                    send( xmit1, "/fadeOut", 20 );
+                    send( xmit2, "/fadeOut", 20 );
                 }
                 
             }

@@ -100,11 +100,11 @@ fun void osc_listener() {
             }
             else if( msg.address == "/fadeIn" ) {
                 <<< " starting fade in" >>>;
-                spork ~ fadeIn( e2, msg.getFloat(0) );
+                spork ~ fadeIn( e2, 20 );
             }
             else if( msg.address == "/fadeOut" ) {
                 <<< "fading out" >>>;
-                spork ~ fadeOut(e2, msg.getFloat(0) );
+                spork ~ fadeOut(e2, 20 );
             }
         }
     }

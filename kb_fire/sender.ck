@@ -41,8 +41,9 @@ xmit2.dest( pitwo, port );
 "/buff2" => string buff2;
 "/master" => string master;
 
-0 => int masterState;
-
+0 => float masterState;
+float fadeTime;
+/*
 fun void masterSoundSwitch() {
     if( 0 == masterState ) {
         1 => masterState;
@@ -55,6 +56,8 @@ fun void masterSoundSwitch() {
     send( xmit1, master, masterState );
     send( xmit2, master, masterState );
 }
+*/
+
 fun void ui() {
     // event loop
     while( true )
@@ -71,7 +74,7 @@ fun void ui() {
                 <<< msg.key >>>; //"key down:", msg.which, "code", msg.key, "usb key", msg.ascii, "ascii" >>>;
                 // master on/off
                 if( msg.key == 44 ) {
-                    masterSoundSwitch();
+                    <<<"MASTER">>>;//masterSoundSwitch();
                 }
                 // turn pione buff 1 on/off
                 else if( msg.key == 30 ) {
@@ -95,14 +98,28 @@ fun void ui() {
                 }
                 // start fadeIN
                 else if( msg.key == 9 ) {
+                    15.0 => fadeTime;
                     <<< "FADE IN" >>>;
-                    send( xmit1, "/fadeIn");
-                    send( xmit2, "/fadeIn");
+                    xmit1.start("/fadeIn");
+                    xmit1.add(fadeTime);
+                    xmit1.send();
+                    xmit2.start("/fadeIn");
+                    xmit2.add(fadeTime);
+                    xmit2.send();
+                    //send( xmit1, "/fadeIn");
+                    //send( xmit2, "/fadeIn");
                 }
                 else if ( msg.key == 10 ) {
+                    15.0 => fadeTime;
                     <<< "FADE OUT" >>>;
-                    send( xmit1, "/fadeOut");
-                    send( xmit2, "/fadeOut");
+                    xmit1.start("/fadeOut");
+                    xmit1.add(fadeTime);
+                    xmit1.send();
+                    xmit2.start("/fadeOut");
+                    xmit2.add(fadeTime);
+                    xmit2.send();
+                    //send( xmit1, "/fadeOut");
+                    //send( xmit2, "/fadeOut");
                 }
                 
             }
